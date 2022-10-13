@@ -6,7 +6,7 @@ from pdfminer.converter import PDFConverter, PDFPageAggregator
 from pdfminer.layout import LAParams, LTTextBoxHorizontal
 import re
 class PDFReader():
-    def __init__(self, path="1812.05784PointPillar.pdf", passwd=None):
+    def __init__(self, path, passwd=None):
         fp = open(path, "rb")
         # 创建一个pdf文档分析器
         file_parser = PDFParser(fp)
@@ -41,17 +41,21 @@ class PDFReader():
 
             # 开始循环处理，每次处理一页
             flag = 0
+            ref_text = ""
             for page in pdfFile.get_pages():
-                if flag == 1:
-                    break
+                # if flag == 1:
+                #     break
                 interpreter.process_page(page)
                 layout = device.get_result()
-                for x in layout:
+                layout_num = len(layout)
+                for idx,x in enumerate(layout):
+                    if idx == layout_num-1:# 删除页脚
+                        continue
                     if(isinstance(x, LTTextBoxHorizontal)):
                         str = x.get_text()
                         if flag == 1:
-                            ref_text = str
-                            break
+                            ref_text += str
+                            # break
                         if "References\n" in str:
                             flag = 1
             
@@ -66,7 +70,7 @@ class PDFReader():
 
         # 将每条内的换行符去掉
         ref_text = re.sub(r'-\n',"",ref_text)
-        ref_text = re.sub(r'\n[^\[]'," ",ref_text) # bug!!!!!!
+        ref_text = re.sub(r'\n([^\[])'," \g<1>",ref_text)
         # 按标号与换行符匹配每一条ref(.*?: 非贪婪匹配),不返回标号
         ref_list = re.findall(r'\[\d+\](.*?\n)',ref_text,flags=re.DOTALL)
         return ref_list
@@ -76,7 +80,7 @@ class PDFReader():
 
 
 if __name__=='__main__':
-    file_reader = PDFReader()
+    file_reader = PDFReader("example_pdf/Lang_PointPillars_Fast_Encoders_for_Object_Detection_From_Point_Clouds_CVPR_2019_paper.pdf")
     ref_text =     file_reader.extract_pdfref()
     with open("ref.txt","w") as f:
         f.write(ref_text)

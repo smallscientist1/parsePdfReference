@@ -24,7 +24,7 @@ class crossref():
             self.headers = headers
         self.bib_header = {"Accept": "application/x-bibtex"} # crossref
 
-    def export_Bib_file(self, export_path,score=70.0):
+    def export_Bib_file(self, export_path,score=50.0):
         '''
         export_path: 导出bib文件的路径
         scores: crossref返回的置信度，设置一个阈值
@@ -35,20 +35,20 @@ class crossref():
         file_list = self.file_list
         bib_header = self.bib_header
         
-        for pfile in file_list:
+        for idx,pfile in enumerate(file_list):
             file_addr,file_idx = self.get_file_address(pfile,score=score)
             if file_addr is None:
                 continue
 
             downloaded_file = requests.get(file_addr,headers=bib_header).content
-            with open(os.path.join(export_path,file_idx+'.bib'),"wb") as f:
+            with open(os.path.join(export_path,'{}.bib'.format(idx+1)),"wb") as f:
                 f.write(downloaded_file)
 
         return
 
 
 
-    def get_file_address(self, article_name: str, score=70.0):
+    def get_file_address(self, article_name: str, score=50.0):
         '''
         input:
             文章名

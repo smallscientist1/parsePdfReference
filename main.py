@@ -4,6 +4,7 @@ from file_io.pdf_io import PDFReader
 from DownloadAPI import buildBibDownloader
 
 import sys
+import os
 from PyQt5.QtWidgets import (QApplication, QDialog, QFileDialog, QGridLayout,
                              QLabel, QPushButton)
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -107,6 +108,10 @@ class processThread(QThread):
         # parse pdf
         file_reader = PDFReader(pdf_file)
         ref_list = file_reader.parse_ref()
+        # write the parse result into ref.txt
+        with open(os.path.join(exportpath,"ref.txt"),"w") as f:
+            for idx,reff in enumerate(ref_list):
+                f.write("[{}] ".format(idx+1) + reff)
         # download bib file
         BibDowner = buildBibDownloader(db_name="crossref",file_list = ref_list)
         BibDowner.export_Bib_file(exportpath)
