@@ -3,13 +3,13 @@
 输入一个计算机/电子类文章的 PDF 文件（例如一篇 CVPR 文章，示例中使用`Attention Is All You Need`的PDF文件），解析出所有的参考文献，保存为ref.txt文件，并下载所有的文献的 BIB 文件（可以选择从 crossref或DBLP 下载）
 
 ## 软件代码
-### file_io
+### file_io文件夹
 PDFReader类: 用于解析pdf文件, 提取出其中有关参考文献的部分
 - PDFReader.\__init\__(file_path, passwd): 输入需要解析的pdf文件名和密码(若有),创建一个PDFReader对象
 - PDFReader.extract_pdf():提取出pdf文件中的文字,找到Reference的部分,以字符串形式返回;
 - PDFReader.parse_pdf():调用extract_pdf(), 并对其返回的Reference字符串进行正则表达式匹配, 提取出每条参考文献的信息。
 
-### DownloadAPI
+### DownloadAPI文件夹
 Download bib file from online database
 本项目支持从crossref与dblp两个数据库下载bib文件,默认使用crossref
 #### crossref
@@ -23,7 +23,7 @@ dblp类
 从`https://dblp.uni-trier.de` 下载参考文献的bib文件。
 类接口与crossref相同
 
-### main.py
+### main.py文件
 使用Pyqt5实现的GUI
 #### win类
 基于PyQt5.QtWidgets.Qdialog的窗口
