@@ -18,6 +18,10 @@ crossref类:
 - crossref.\__init\__(file_list, headers=None): 输入需要下载的文件列表,http请求的头部, 创建一个crossref对象
 - crossref.export_Bib_file(self, export_path,score=70.0): 下载导出bib文件. `export_path`为导出bib文件的路径;`score`为搜索结果匹配阈值, 若搜索结果的匹配程度(由crossref返回)低于score, 则不导出。
 - crossref.get_file_address(article_name: str, score=70.0):输入搜索的内容, 返回对应bib文件的下载地址
+#### dblp
+dblp类
+从`https://dblp.uni-trier.de` 下载参考文献的bib文件。
+类接口与crossref相同
 
 ### main.py
 使用Pyqt5实现的GUI
